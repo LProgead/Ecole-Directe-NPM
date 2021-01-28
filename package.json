@@ -1,0 +1,23 @@
+{
+  "name": "@lprogead/ecole-directe",
+  "version": "1.1.0",
+  "description": "A module to access easily to the Ecole-Directe API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecole-directe",
+    "api"
+  ],
+  "author": "LProgead <lprogead@mailo.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LProgead/Ecole-Directe-NPM.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LProgead/Ecole-Directe-NPM/issues"
+  },
+  "homepage": "https://github.com/LProgead/Ecole-Directe-NPM#readme"
+}
