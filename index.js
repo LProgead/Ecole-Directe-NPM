@@ -188,6 +188,66 @@ exports.getGrades = function (id, token, callback) {
 		});
 }
 
+exports.getDigitalBooks = function (id, token, callback) {
+	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/Eleves/${id}/manuelsNumeriques.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
+exports.getMCQ = function (id, token, callback) {
+	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/eleves/${id}/qcms/0/associations.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
+exports.getTimeline = function (id, token, callback) {
+	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/E/${id}/timelineAccueilCommun.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
 exports.getDocuments = function (token, callback) {
 	const raw = `data={\n	\"token\": \"${token}\"\n}`;
 
