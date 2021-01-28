@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 exports.getToken = function (id, password, callback) {
-	const raw = `data={	"identifiant": "${id}",	"motdepasse": "${password}"}`;
+	const raw = `data={"identifiant": "${id}",	"motdepasse": "${password}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -23,7 +23,7 @@ exports.getToken = function (id, password, callback) {
 }
 
 exports.getID = function (id, password, callback) {
-	const raw = `data={	"identifiant": "${id}",	"motdepasse": "${password}"}`;
+	const raw = `data={"identifiant": "${id}",	"motdepasse": "${password}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -44,8 +44,30 @@ exports.getID = function (id, password, callback) {
 		});
 }
 
+exports.getBarcode = function (id, password, callback) {
+	const raw = `data={"identifiant": "${id}",	"motdepasse": "${password}"}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch("https://api.ecoledirecte.com/v3/login.awp", requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			const id = json_results.data.accounts[0].modules[0].params.numeroBadge;
+
+			callback(id);
+		});
+}
+
 exports.getClassID = function (id, password, callback) {
-	const raw = `data={	"identifiant": "${id}",	"motdepasse": "${password}"}`;
+	const raw = `data={"identifiant": "${id}",	"motdepasse": "${password}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -67,7 +89,7 @@ exports.getClassID = function (id, password, callback) {
 }
 
 exports.getAccountInformations = function (id, password, callback) {
-	const raw = `data={	"identifiant": "${id}",	"motdepasse": "${password}"}`;
+	const raw = `data={"identifiant": "${id}",	"motdepasse": "${password}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -89,7 +111,7 @@ exports.getAccountInformations = function (id, password, callback) {
 }
 
 exports.getMessages = function (token, id, callback) {
-	const raw = `data={	"token": "${token}"}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -109,7 +131,7 @@ exports.getMessages = function (token, id, callback) {
 }
 
 exports.getSchedule = function (from, to, id, token, callback) {
-	const raw = `data={ "dateDebut": "${from}", "dateFin": "${to}", "avecTrous": false, "token": "${token}"}`;
+	const raw = `data={"dateDebut": "${from}", "dateFin": "${to}", "avecTrous": false, "token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -129,7 +151,7 @@ exports.getSchedule = function (from, to, id, token, callback) {
 }
 
 exports.getHomework = function (id, token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -149,7 +171,7 @@ exports.getHomework = function (id, token, callback) {
 }
 
 exports.getSchoolLife = function (classroom, token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -169,7 +191,7 @@ exports.getSchoolLife = function (classroom, token, callback) {
 }
 
 exports.getGrades = function (id, token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -189,7 +211,7 @@ exports.getGrades = function (id, token, callback) {
 }
 
 exports.getDigitalBooks = function (id, token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -209,7 +231,7 @@ exports.getDigitalBooks = function (id, token, callback) {
 }
 
 exports.getMCQ = function (id, token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -229,7 +251,7 @@ exports.getMCQ = function (id, token, callback) {
 }
 
 exports.getTimeline = function (id, token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -249,7 +271,7 @@ exports.getTimeline = function (id, token, callback) {
 }
 
 exports.getDocuments = function (token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -268,8 +290,148 @@ exports.getDocuments = function (token, callback) {
 		});
 }
 
+exports.getCloud = function (id, token, callback) {
+	const raw = `data={"token": "${token}"}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/cloud/E/${id}.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
+exports.getENTList = function (id, token, callback) {
+	const raw = `data={"token": "${token}"}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/E/${id}/espacestravail.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
+exports.getENTInfos = function (idENT, id, token, callback) {
+	const raw = `data={"token": "${token}"}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/E/${id}/espacestravail/${idENT}.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
+exports.getENTAgenda = function (idENT, token, callback) {
+	const raw = `data={"token": "${token}"}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/W/${idENT}/agendaEvenements.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
+exports.getENTTopics = function (idENT, id, token, callback) {
+	const raw = `data={"token": "${token}"}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/E/${id}/espacestravail/${idENT}/topics.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
+exports.getENTCloud = function (idENT, token, callback) {
+	const raw = `data={"token": "${token}"}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/cloud/W/${idENT}.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
+exports.getENTMembers = function (idENT, id, token, callback) {
+	const raw = `data={"token": "${token}"}`;
+
+	var requestOptions = {
+		method: 'POST',
+		body: raw,
+		redirect: 'follow'
+	};
+
+	fetch(`https://api.ecoledirecte.com/v3/E/${id}/espacestravail/${idENT}/membres.awp?verbe=get`, requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			const json_results = JSON.parse(result);
+
+			if (json_results.code != 200) return console.error(json_results.message);
+
+			callback(json_results.data);
+		});
+}
+
 exports.getProfessors = function (classroom, token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
@@ -289,7 +451,7 @@ exports.getProfessors = function (classroom, token, callback) {
 }
 
 exports.getStaff = function (classroom, token, callback) {
-	const raw = `data={\n	\"token\": \"${token}\"\n}`;
+	const raw = `data={"token": "${token}"}`;
 
 	var requestOptions = {
 		method: 'POST',
